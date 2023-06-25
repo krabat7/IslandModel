@@ -1,4 +1,8 @@
 public class Eagle extends Predator {
+    public Eagle() {
+        super(6, 3, 1);
+    }
+
     @Override
     public void eat() {
 

@@ -1,4 +1,8 @@
 public class Caterpillar extends Herbivore{
+    public Caterpillar() {
+        super(0.01, 0, 0);
+    }
+
     @Override
     void eat() {
 

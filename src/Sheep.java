@@ -1,4 +1,8 @@
 public class Sheep extends Herbivore{
+    public Sheep() {
+        super(70, 3, 15);
+    }
+
     @Override
     void eat() {
 

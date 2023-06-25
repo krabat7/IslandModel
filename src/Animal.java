@@ -1,30 +1,21 @@
 public abstract class Animal {
-    int weight; // Вес одного животного, кг
+    double weight; // Вес одного животного, кг
     int step; // Скорость перемещения, не более чем, клеток за ход
-    int maxFood; // Максимальное количество килограммов пищи нужно животному для полного насыщения
+    double maxFood; // Максимальное количество килограммов пищи нужно животному для полного насыщения
+    public Animal(double weight, int step, double maxFood){
+        this.weight = weight;
+        this.step = step;
+        this.maxFood = maxFood;
+    }
 
-    public int getWeight() {
+    public double getWeight() {
         return weight;
     }
-
-    public void setWeight(int weight) {
-        this.weight = weight;
-    }
-
     public int getStep() {
         return step;
     }
-
-    public void setStep(int step) {
-        this.step = step;
-    }
-
-    public int getMaxFood() {
+    public double getMaxFood() {
         return maxFood;
-    }
-
-    public void setMaxFood(int maxFood) {
-        this.maxFood = maxFood;
     }
 
     abstract void eat();
