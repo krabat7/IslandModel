@@ -1,3 +1,5 @@
+package lifeform.animal;
+
 public abstract class Animal {
     double weight; // Вес одного животного, кг
     int step; // Скорость перемещения, не более чем, клеток за ход
@@ -18,8 +20,8 @@ public abstract class Animal {
         return maxFood;
     }
 
-    abstract void eat();
-    abstract void multiply();
-    abstract void move();
-    abstract void die();
+    public abstract void eat();
+    public abstract void multiply();
+    public abstract void move();
+    public abstract void die();
 }

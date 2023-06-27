@@ -1,6 +1,8 @@
-public class Snake extends Predator {
-    public Snake(int weight, int step, int maxFood) {
-        super(15, 1, 3);
+package lifeform.animal.herbivore;
+
+public class Deer extends Herbivore {
+    public Deer() {
+        super(300, 4, 50);
     }
 
     @Override

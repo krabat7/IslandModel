@@ -1,6 +1,9 @@
-public class Bear extends Predator {
-    public Bear(){
-        super(500, 2, 80);
+package lifeform.animal.predator;
+
+
+public class Wolf extends Predator {
+    public Wolf() {
+        super(50, 3, 8);
     }
 
     @Override
