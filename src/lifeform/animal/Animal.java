@@ -1,13 +1,17 @@
 package lifeform.animal;
 
+import field.Location;
+
 public abstract class Animal {
     double weight; // Вес одного животного, кг
     int step; // Скорость перемещения, не более чем, клеток за ход
     double maxFood; // Максимальное количество килограммов пищи нужно животному для полного насыщения
-    public Animal(double weight, int step, double maxFood){
+    int maxPopulation; // Максимальное количество вида животного на 1 клетке
+    public Animal(double weight, int step, double maxFood, int maxPopulation){
         this.weight = weight;
         this.step = step;
         this.maxFood = maxFood;
+        this.maxPopulation = maxPopulation;
     }
 
     public double getWeight() {
@@ -19,9 +23,11 @@ public abstract class Animal {
     public double getMaxFood() {
         return maxFood;
     }
+    public int getMaxPopulation() {
+        return maxPopulation;
+    }
 
-    public abstract void eat();
-    public abstract void multiply();
-    public abstract void move();
-    public abstract void die();
+    public abstract void eat(Object food);
+    public abstract void multiply(Animal partner);
+    public abstract void move(Location[][] locations);
 }

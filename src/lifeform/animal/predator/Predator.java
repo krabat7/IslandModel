@@ -3,7 +3,7 @@ package lifeform.animal.predator;
 import lifeform.animal.Animal;
 
 abstract class Predator extends Animal {
-    public Predator(double weight, int step, double maxFood) {
-        super(weight, step, maxFood);
+    public Predator(double weight, int step, double maxFood, int maxPopulation) {
+        super(weight, step, maxFood, maxPopulation);
     }
 }

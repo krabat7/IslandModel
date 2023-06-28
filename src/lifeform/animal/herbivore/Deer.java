@@ -1,27 +1,25 @@
 package lifeform.animal.herbivore;
 
+import field.Location;
+import lifeform.animal.Animal;
+
 public class Deer extends Herbivore {
     public Deer() {
-        super(300, 4, 50);
+        super(300, 4, 50, 20);
     }
 
     @Override
-    public void eat() {
-
-    }
-
-    @Override
-    public void multiply() {
+    public void eat(Object food) {
 
     }
 
     @Override
-    public void move() {
+    public void multiply(Animal partner) {
 
     }
 
     @Override
-    public void die() {
+    public void move(Location[][] locations) {
 
     }
 }
