@@ -1,20 +1,22 @@
 package field;
 
 import lifeform.animal.Animal;
+import lifeform.plant.Plant;
 
 import java.util.*;
 
 public class Location {
+    private int row;
+    private int column;
     private List<Animal> animals;
-    private boolean hasPlant;
+    private List<Plant> plants;
 
-    public Location() {
+    public Location(int row, int column) {
+        this.row = row;
+        this.column = column;
+
         animals = new ArrayList<>();
-        hasPlant = false;
-    }
-
-    public List<Animal> getAnimals() {
-        return animals;
+        plants = new ArrayList<>();
     }
 
     public void addAnimal(Animal animal) {
@@ -25,11 +27,17 @@ public class Location {
         animals.remove(animal);
     }
 
-    public boolean hasPlant() {
-        return hasPlant;
+    public void addPlant() {
+        plants.add(new Plant());
+    }
+    public void removePlant() {
+        plants.remove(0);
     }
 
-    public void setHasPlant(boolean hasPlant) {
-        this.hasPlant = hasPlant;
+    public List<Plant> getPlants() {
+        return plants;
+    }
+    public List<Animal> getAnimals() {
+        return animals;
     }
 }

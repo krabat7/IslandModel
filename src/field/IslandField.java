@@ -1,13 +1,19 @@
 package field;
 
 import lifeform.animal.Animal;
+import lifeform.plant.Plant;
+
 import java.util.ArrayList;
 import java.util.List;
 
 public class IslandField {
-    private Location[][] locations;
+    private Location[][] locations; // Двумерный массив состоящий из локаций(ячеек)
+    private int numRows;
+    private int numColumns;
 
     public IslandField(int numRows, int numColumns) {
+        this.numRows = numRows;
+        this.numColumns = numColumns;
         locations = new Location[numRows][numColumns];
         initializeLocations();
     }
@@ -15,7 +21,7 @@ public class IslandField {
     private void initializeLocations() {
         for (int i = 0; i < locations.length; i++) {
             for (int j = 0; j < locations[i].length; j++) {
-                locations[i][j] = new Location();
+                locations[i][j] = new Location(i, j);
             }
         }
     }
@@ -34,9 +40,14 @@ public class IslandField {
         location.removeAnimal(animal);
     }
 
-    public void setPlant(int row, int column, boolean hasPlant) {
+    public void addPlant(int row, int column) {
         Location location = getLocation(row, column);
-        location.setHasPlant(hasPlant);
+        location.addPlant();
+    }
+
+    public void removePlant(int row, int column) {
+        Location location = getLocation(row, column);
+        location.removePlant();
     }
 
     public List<Animal> getAllAnimals() {
@@ -47,5 +58,22 @@ public class IslandField {
             }
         }
         return allAnimals;
+    }
+    public List<Plant> getAllPlants() {
+        List<Plant> allPlants = new ArrayList<>();
+        for (Location[] row : locations) {
+            for (Location location : row) {
+                allPlants.addAll(location.getPlants());
+            }
+        }
+        return allPlants;
+    }
+
+    public int getNumRows() {
+        return numRows;
+    }
+
+    public int getNumColumns() {
+        return numColumns;
     }
 }
