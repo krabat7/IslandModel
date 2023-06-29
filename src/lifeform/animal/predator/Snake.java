@@ -4,7 +4,7 @@ import field.Location;
 import lifeform.animal.Animal;
 
 public class Snake extends Predator {
-    public Snake(int weight, int step, int maxFood) {
+    public Snake() {
         super(15, 1, 3, 30);
     }
 
