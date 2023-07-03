@@ -5,7 +5,7 @@ import lifeform.animal.Animal;
 
 public class WildBoar extends Herbivore {
     public WildBoar() {
-        super(400, 2, 50, 50);
+        super(400, 2, 50, 50, "WildBoar");
     }
 
     @Override

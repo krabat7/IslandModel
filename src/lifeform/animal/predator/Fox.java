@@ -5,7 +5,7 @@ import lifeform.animal.Animal;
 
 public class Fox extends Predator {
     public Fox() {
-        super(8, 2, 2, 30);
+        super(8, 2, 2, 30, "Fox");
     }
 
     @Override
