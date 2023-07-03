@@ -7,15 +7,24 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class IslandField {
-    private Location[][] locations; // Двумерный массив состоящий из локаций(ячеек)
-    private int numRows;
-    private int numColumns;
+    private final Location[][] locations; // Двумерный массив состоящий из локаций(ячеек)
+    private int numRows = 100; //default
+    private int numColumns = 20; //default
+    private static volatile IslandField instance;
 
-    public IslandField(int numRows, int numColumns) {
-        this.numRows = numRows;
-        this.numColumns = numColumns;
+    public IslandField() {
         locations = new Location[numRows][numColumns];
         initializeLocations();
+    }
+    public static IslandField getInstance() {
+        if (instance == null) {
+            synchronized (IslandField.class) {
+                if (instance == null) {
+                    instance = new IslandField();
+                }
+            }
+        }
+        return instance;
     }
 
     private void initializeLocations() {
@@ -75,5 +84,13 @@ public class IslandField {
 
     public int getNumColumns() {
         return numColumns;
+    }
+
+    public void setNumRows(int numRows) {
+        this.numRows = numRows;
+    }
+
+    public void setNumColumns(int numColumns) {
+        this.numColumns = numColumns;
     }
 }
