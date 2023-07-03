@@ -16,17 +16,17 @@ public class IslandSimulation {
     private List<Plant> plants;
 
     public IslandSimulation() {
-        createIslandModel(100, 20);
+        createIslandModel();
+    }
+    private void createIslandModel(){
+        islandField = IslandField.getInstance();
+        herbivores = createHerbivores();
+        predators = createPredators();
+        plants = createPlants(200);
 
         placeHerbivores();
         placePredators();
         placePlants();
-    }
-    private void createIslandModel(int numRows, int numColumns){
-        islandField = new IslandField(numRows, numColumns);
-        herbivores = createHerbivores();
-        predators = createPredators();
-        plants = createPlants(200);
     }
 
     private List<Herbivore> createHerbivores() {
