@@ -1,6 +1,9 @@
 package lifeform.animal.predator;
 
+import error.ObjectNotFoundException;
+import field.IslandField;
 import field.Location;
+import lifeform.LifeForm;
 import lifeform.animal.Animal;
 import lifeform.plant.Plant;
 import java.util.Random;
@@ -14,16 +17,20 @@ public class Bear extends Predator {
     @Override
     public void eat(Object food) {
         double chanceToEat;
-        String name = null;
+        LifeForm lifeForm = null;
 
-        if (food instanceof Animal) {
-            name = ((Animal) food).getName();
+        if (food instanceof LifeForm) {
+            lifeForm = (LifeForm) food;
+        } else{
+            try {
+                throw new ObjectNotFoundException("Объект не является животными/растением.");
+            } catch (Exception e){
+                System.out.println(e.getMessage());
+            }
         }
-        if (food instanceof Plant) {
-            name = ((Plant) food).getName();
-        }
+        String foodName = lifeForm.getName();
 
-        switch (name) {
+        switch (foodName) {
             case "Duck" -> chanceToEat = 0.1;
             case "Buffalo" -> chanceToEat = 0.2;
             case "Horse" -> chanceToEat = 0.4;
@@ -35,6 +42,18 @@ public class Bear extends Predator {
         }
 
         boolean animalEatFood = ThreadLocalRandom.current().nextDouble() < chanceToEat;
+
+        if (animalEatFood){
+            setHp(Math.min((getHp() + lifeForm.getWeight()), getMaxHp())); // Показатель здоровья повышается после съедения
+
+            Location location = IslandField.getInstance().getLocation(getRow(), getColumn()); // Животное/растение удаляется из списка обиталей локации после съедения
+            if (lifeForm instanceof Animal){
+                Animal animal = (Animal) lifeForm;
+                location.removeAnimal(animal);
+            }else{
+                location.removePlant();
+            }
+        }
 }
 
     @Override
