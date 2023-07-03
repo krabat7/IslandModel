@@ -40,4 +40,12 @@ public class Location {
     public List<Animal> getAnimals() {
         return animals;
     }
+
+    public int getRow() {
+        return row;
+    }
+
+    public int getColumn() {
+        return column;
+    }
 }
