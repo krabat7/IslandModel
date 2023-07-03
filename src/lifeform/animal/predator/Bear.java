@@ -1,11 +1,10 @@
 package lifeform.animal.predator;
 
-import error.ObjectNotFoundException;
+import error.ObjectNotLifeFormException;
 import field.IslandField;
 import field.Location;
 import lifeform.LifeForm;
 import lifeform.animal.Animal;
-import lifeform.plant.Plant;
 import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
@@ -23,7 +22,7 @@ public class Bear extends Predator {
             lifeForm = (LifeForm) food;
         } else{
             try {
-                throw new ObjectNotFoundException("Объект не является животными/растением.");
+                throw new ObjectNotLifeFormException("Объект не является животными/растением.");
             } catch (Exception e){
                 System.out.println(e.getMessage());
             }
