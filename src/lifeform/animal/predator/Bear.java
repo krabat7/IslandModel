@@ -57,7 +57,9 @@ public class Bear extends Predator {
 
     @Override
     public void multiply(Animal partner) {
-
+        if (partner instanceof Bear){
+            IslandField.getInstance();
+        }
     }
 
     @Override
