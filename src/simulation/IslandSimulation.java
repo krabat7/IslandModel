@@ -81,10 +81,10 @@ public class IslandSimulation {
     }
     private void placePlants() {
         Random random = ThreadLocalRandom.current();
-        for (int i = 0; i < plants.size(); i++) {
+        for (Plant plant : plants) {
             int row = random.nextInt(islandField.getNumRows());
             int column = random.nextInt(islandField.getNumColumns());
-            islandField.addPlant(row, column);
+            islandField.addPlant(plant, row, column);
         }
     }
 }

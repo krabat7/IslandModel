@@ -49,9 +49,9 @@ public class IslandField {
         location.removeAnimal(animal);
     }
 
-    public void addPlant(int row, int column) {
+    public void addPlant(Plant plant, int row, int column) {
         Location location = getLocation(row, column);
-        location.addPlant();
+        location.addPlant(plant);
     }
 
     public void removePlant(int row, int column) {

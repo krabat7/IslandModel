@@ -20,6 +20,9 @@ public class Location {
     }
 
     public void addAnimal(Animal animal) {
+        animal.setRow(row);
+        animal.setColumn(column);
+
         animals.add(animal);
     }
 
@@ -27,7 +30,9 @@ public class Location {
         animals.remove(animal);
     }
 
-    public void addPlant() {
+    public void addPlant(Plant plant) {
+        plant.setRow(row);
+        plant.setColumn(column);
         plants.add(new Plant());
     }
     public void removePlant() {
