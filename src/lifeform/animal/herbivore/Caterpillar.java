@@ -1,5 +1,6 @@
 package lifeform.animal.herbivore;
 
+import field.IslandField;
 import field.Location;
 import lifeform.animal.Animal;
 
@@ -9,17 +10,10 @@ public class Caterpillar extends Herbivore {
     }
 
     @Override
-    public void eat(Object food) {
-
-    }
-
-    @Override
     public void multiply(Animal partner) {
-
-    }
-
-    @Override
-    public void move(Location[][] locations) {
-
+        if (partner instanceof Caterpillar){
+            Location location = IslandField.getInstance().getLocation(partner.getRow(), partner.getColumn());
+            location.addAnimal(new Caterpillar());
+        }
     }
 }

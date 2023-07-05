@@ -5,7 +5,6 @@ import field.IslandField;
 import field.Location;
 import lifeform.LifeForm;
 import lifeform.animal.Animal;
-import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Bear extends Predator {
@@ -45,7 +44,7 @@ public class Bear extends Predator {
         if (animalEatFood){
             setHp(Math.min((getHp() + lifeForm.getWeight()), getMaxHp())); // Показатель здоровья повышается после съедения
 
-            Location location = IslandField.getInstance().getLocation(getRow(), getColumn()); // Животное/растение удаляется из списка обиталей локации после съедения
+            Location location = IslandField.getInstance().getLocation(lifeForm.getRow(), lifeForm.getColumn()); // Животное/растение удаляется из списка обиталей локации после съедения
             if (lifeForm instanceof Animal){
                 Animal animal = (Animal) lifeForm;
                 location.removeAnimal(animal);
@@ -58,14 +57,8 @@ public class Bear extends Predator {
     @Override
     public void multiply(Animal partner) {
         if (partner instanceof Bear){
-            IslandField.getInstance();
+            Location location = IslandField.getInstance().getLocation(partner.getRow(), partner.getColumn());
+            location.addAnimal(new Bear());
         }
-    }
-
-    @Override
-    public void move(Location[][] locations) {
-        Random rnd = ThreadLocalRandom.current();
-        int row = rnd.nextInt();
-        int column = rnd.nextInt();
     }
 }
