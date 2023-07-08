@@ -2,7 +2,6 @@ package field;
 
 import lifeform.animal.Animal;
 import lifeform.plant.Plant;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -12,7 +11,7 @@ public class IslandField {
     private int numColumns = 20; //default
     private static volatile IslandField instance;
 
-    public IslandField() {
+    private IslandField() {
         locations = new Location[numRows][numColumns];
         initializeLocations();
     }
@@ -93,4 +92,5 @@ public class IslandField {
     public void setNumColumns(int numColumns) {
         this.numColumns = numColumns;
     }
+
 }
