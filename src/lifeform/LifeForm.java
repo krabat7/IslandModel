@@ -1,9 +1,9 @@
 package lifeform;
 
 public class LifeForm {
-    public double weight; // Вес животного/растения в кг
-    public int maxPopulation; // Максимальное количество вида животного/растения на 1 клетке
-    public String name; // Имя животного/растения
+    private double weight; // Вес животного/растения в кг
+    private int maxPopulation; // Максимальное количество вида животного/растения на 1 клетке
+    private String name; // Имя животного/растения
     private int row;
     private int column;
     public LifeForm(double weight, int maxPopulation, String name){
