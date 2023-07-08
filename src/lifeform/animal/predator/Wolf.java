@@ -15,9 +15,10 @@ public class Wolf extends Predator {
     }
 
     @Override
-    public void eat(Object food) {
+    public boolean eat(Object food) {
         double chanceToEat;
         LifeForm lifeForm = null;
+        boolean animalEatFood;
 
         if (food instanceof LifeForm) {
             lifeForm = (LifeForm) food;
@@ -40,7 +41,7 @@ public class Wolf extends Predator {
             default -> chanceToEat = 0;
         }
 
-        boolean animalEatFood = ThreadLocalRandom.current().nextDouble() < chanceToEat;
+        animalEatFood = ThreadLocalRandom.current().nextDouble() < chanceToEat;
 
         if (animalEatFood){
             setHp(Math.min((getHp() + lifeForm.getWeight()), getMaxHp())); // Показатель здоровья повышается после съедения
@@ -53,6 +54,7 @@ public class Wolf extends Predator {
                 location.removePlant();
             }
         }
+        return animalEatFood;
     }
 
     @Override

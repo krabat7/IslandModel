@@ -14,9 +14,10 @@ public abstract class Herbivore extends Animal {
     }
 
     @Override
-    public void eat(Object food) {
+    public boolean eat(Object food) {
         double chanceToEat;
         LifeForm lifeForm = null;
+        boolean animalEatFood;
 
         if (food instanceof LifeForm) {
             lifeForm = (LifeForm) food;
@@ -34,7 +35,7 @@ public abstract class Herbivore extends Animal {
             default -> chanceToEat = 0;
         }
 
-        boolean animalEatFood = ThreadLocalRandom.current().nextDouble() < chanceToEat;
+        animalEatFood = ThreadLocalRandom.current().nextDouble() < chanceToEat;
 
         if (animalEatFood){
             setHp(Math.min((getHp() + lifeForm.getWeight()), getMaxHp())); // Показатель здоровья повышается после съедения
@@ -47,5 +48,6 @@ public abstract class Herbivore extends Animal {
                 location.removePlant();
             }
         }
+        return animalEatFood;
     }
 }

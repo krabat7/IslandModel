@@ -16,7 +16,7 @@ public abstract class Animal extends LifeForm {
         this.hp = maxHp; // На старте максимальное количество здоровья
     }
 
-    public abstract void eat(Object food);
+    public abstract boolean eat(Object food);
     public abstract void multiply(Animal partner);
     public void move() {
         int randomCells = ThreadLocalRandom.current().nextInt(1, getStep() + 1);
@@ -40,7 +40,7 @@ public abstract class Animal extends LifeForm {
         }
 
         // Проверяем, чтобы новые координаты не выходили за границы поля
-        while (newRow < 0 || IslandField.getInstance().getNumRows() >= 20 || newColumn < 0 || newColumn >= IslandField.getInstance().getNumColumns()) {
+        while (newRow < 0 || newRow > IslandField.getInstance().getNumRows() || newColumn < 0 || newColumn > IslandField.getInstance().getNumColumns()) {
             randomCells = ThreadLocalRandom.current().nextInt(1, getStep() + 1);
             direction = ThreadLocalRandom.current().nextInt(4);
 
