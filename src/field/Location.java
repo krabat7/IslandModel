@@ -1,5 +1,6 @@
 package field;
 
+import lifeform.LifeForm;
 import lifeform.animal.Animal;
 import lifeform.plant.Plant;
 
@@ -45,7 +46,12 @@ public class Location {
     public List<Animal> getAnimals() {
         return animals;
     }
-
+    public List<LifeForm> getLifeForms() {
+        List<LifeForm> lifeForms = new ArrayList<>();
+        lifeForms.add((LifeForm) getAnimals());
+        lifeForms.add((LifeForm) getPlants());
+        return lifeForms;
+    }
     public int getRow() {
         return row;
     }
