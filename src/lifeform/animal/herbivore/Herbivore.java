@@ -49,6 +49,8 @@ public abstract class Herbivore extends Animal {
                 System.out.println("HEB_EAT422");
                 if (location.getAnimals().contains(animal)) {
                     location.removeAnimal(animal);
+                } else{
+                    return false;
                 }
                 System.out.println("HEB_EAT42");
             }else{
@@ -56,6 +58,8 @@ public abstract class Herbivore extends Animal {
                 if (location.getPlants().size() > 0) {
                     System.out.println("HEB_EAT4310");
                     location.removePlant();
+                } else{
+                    return false;
                 }
                 System.out.println("HEB_EAT43");
             }

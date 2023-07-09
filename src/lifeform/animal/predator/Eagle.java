@@ -47,10 +47,14 @@ public class Eagle extends Predator {
                 Animal animal = (Animal) lifeForm;
                 if (location.getAnimals().contains(animal)) {
                     location.removeAnimal(animal);
+                } else{
+                    return false;
                 }
             }else{
                 if (location.getPlants().size() > 0) {
                     location.removePlant();
+                } else{
+                    return false;
                 }
             }
         }
