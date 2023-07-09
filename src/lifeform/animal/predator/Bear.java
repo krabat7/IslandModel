@@ -48,9 +48,13 @@ public class Bear extends Predator {
             Location location = IslandField.getInstance().getLocation(lifeForm.getRow(), lifeForm.getColumn()); // Животное/растение удаляется из списка обиталей локации после съедения
             if (lifeForm instanceof Animal){
                 Animal animal = (Animal) lifeForm;
-                location.removeAnimal(animal);
+                if (location.getAnimals().contains(animal)) {
+                    location.removeAnimal(animal);
+                }
             }else{
-                location.removePlant();
+                if (location.getPlants().size() > 0) {
+                    location.removePlant();
+                }
             }
         }
         return animalEatFood;
