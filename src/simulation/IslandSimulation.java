@@ -52,9 +52,9 @@ public class IslandSimulation {
         PlantGrowthTask plantGrowthTask = new PlantGrowthTask();
         StatisticsTask statisticsTask = new StatisticsTask();
 
-        executorService.scheduleAtFixedRate(animalLifecycleTask, 0, 20, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(animalLifecycleTask, 5, 5, TimeUnit.SECONDS);
         executorService.scheduleAtFixedRate(plantGrowthTask, 10, 45, TimeUnit.SECONDS);
-        executorService.scheduleAtFixedRate(statisticsTask, 5, 25, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(statisticsTask, 5, 10, TimeUnit.SECONDS);
     }
 
     private List<Herbivore> createHerbivores(int countHerbivores) {
