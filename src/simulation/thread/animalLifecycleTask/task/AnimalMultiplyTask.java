@@ -3,17 +3,26 @@ package simulation.thread.animalLifecycleTask.task;
 import field.IslandField;
 import field.Location;
 import lifeform.animal.Animal;
+import simulation.IslandSimulation;
+
 import java.util.List;
+import java.util.concurrent.CountDownLatch;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class AnimalMultiplyTask implements Runnable{
     final private AtomicInteger babies;
+    private CountDownLatch latch;
+    public AnimalMultiplyTask(CountDownLatch latch){
+        babies = new AtomicInteger();
+        this.latch = latch;
+    }
     public AnimalMultiplyTask(){
         babies = new AtomicInteger();
     }
     @Override
     public void run() {
         List<Animal> animals = IslandField.getInstance().getAllAnimals();
+        System.out.println("MULT");
         if (animals.size() > 0) {   //проверка на умерли ли все животные
             for (int i = 0; i < animals.size(); i++) {
                 Animal currentAnimal = animals.get(i);
@@ -34,8 +43,11 @@ public class AnimalMultiplyTask implements Runnable{
                 }
             }
         } else {
-            //exit programmu
+            IslandSimulation.getInstance().getExecutorService().shutdown();
+            System.exit(0);
         }
+        latch.countDown();
+        System.out.println("MULT2");
     }
 
     public AtomicInteger getBabies() {
