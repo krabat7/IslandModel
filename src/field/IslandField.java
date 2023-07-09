@@ -7,8 +7,8 @@ import java.util.List;
 
 public class IslandField {
     private final Location[][] locations; // Двумерный массив состоящий из локаций(ячеек)
-    private int numRows = 100; //default
-    private int numColumns = 20; //default
+    private int numRows = 10; //default
+    private int numColumns = 4; //default
     private static volatile IslandField instance;
 
     private IslandField() {
@@ -34,7 +34,7 @@ public class IslandField {
         }
     }
 
-    public Location getLocation(int row, int column) {
+    public synchronized Location getLocation(int row, int column) {
         return locations[row][column];
     }
 
@@ -58,7 +58,7 @@ public class IslandField {
         location.removePlant();
     }
 
-    public List<Animal> getAllAnimals() {
+    public synchronized List<Animal> getAllAnimals() {
         List<Animal> allAnimals = new ArrayList<>();
         for (Location[] row : locations) {
             for (Location location : row) {
