@@ -28,26 +28,39 @@ public abstract class Herbivore extends Animal {
                 System.out.println(e.getMessage());
             }
         }
+        System.out.println("HEB_EAT");
         String foodName = lifeForm.getName();
 
         switch (foodName) {
             case "Plant" -> chanceToEat = 1;
             default -> chanceToEat = 0;
         }
-
+        System.out.println("HEB_EAT2");
         animalEatFood = ThreadLocalRandom.current().nextDouble() < chanceToEat;
-
+        System.out.println("HEB_EAT3");
         if (animalEatFood){
             setHp(Math.min((getHp() + lifeForm.getWeight()), getMaxHp())); // Показатель здоровья повышается после съедения
-
+            System.out.println("HEB_EAT4");
             Location location = IslandField.getInstance().getLocation(lifeForm.getRow(), lifeForm.getColumn()); // Животное/растение удаляется из списка обиталей локации после съедения
+            System.out.println("HEB_EAT41");
             if (lifeForm instanceof Animal){
+                System.out.println("HEB_EAT421");
                 Animal animal = (Animal) lifeForm;
-                location.removeAnimal(animal);
+                System.out.println("HEB_EAT422");
+                if (location.getAnimals().contains(animal)) {
+                    location.removeAnimal(animal);
+                }
+                System.out.println("HEB_EAT42");
             }else{
-                location.removePlant();
+                System.out.println("HEB_EAT431");
+                if (location.getPlants().size() > 0) {
+                    System.out.println("HEB_EAT4310");
+                    location.removePlant();
+                }
+                System.out.println("HEB_EAT43");
             }
         }
+        System.out.println("HEB_EAT5");
         return animalEatFood;
     }
 }
