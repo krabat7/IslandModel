@@ -36,17 +36,19 @@ public class StatisticsTask implements Runnable{
         }
     }
     private boolean checkTime(long timeNow){
-        return timeNow / 60 > 5;
+        return timeNow / 60 >= 5;
     }
     private void printStats(){
+        System.out.println();
+
         if (isTimeOver) {
             System.out.println("ПОБЕДА!!! ВЫ ПРОДЕРЖАЛИСЬ 5 МИНУТ!");
+            System.out.println("----------------------------------");
         } else {
             System.out.printf("Время с начала старта: %s сек.", IslandSimulation.getInstance().getTimeNow());
+            System.out.println();
         }
 
-        System.out.println();
-        System.out.println();
         System.out.println("СТАТИСТИКА ПО ОСТРОВУ");
         System.out.println();
 
@@ -66,7 +68,7 @@ public class StatisticsTask implements Runnable{
         System.out.println(countPlants);
 
         System.out.println();
-        System.out.println("--------------------------");
+        System.out.println("----------------------------------");
         System.out.println();
     }
 }

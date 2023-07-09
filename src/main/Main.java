@@ -9,9 +9,9 @@ public class Main {
     }
 
     private static void printStartWords(){
-        System.out.println("--------------------------");
+        System.out.println("----------------------------------");
         System.out.println("Загрузка симуляции острова...");
-        System.out.println("--------------------------");
+        System.out.println("----------------------------------");
         System.out.println();
     }
 }
