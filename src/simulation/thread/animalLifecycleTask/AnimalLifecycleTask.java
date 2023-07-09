@@ -13,20 +13,19 @@ public class AnimalLifecycleTask implements Runnable{
     @Override
     public void run() {
         ExecutorService executorService = Executors.newFixedThreadPool(4);
-        CountDownLatch latch = new CountDownLatch(2); // Создаем CountDownLatch с числом 2
+        CountDownLatch latch = new CountDownLatch(3); // Создаем CountDownLatch с числом 2
 
         executorService.submit(new AnimalEatTask(latch)); // животное ест
         System.out.println("1");
         executorService.submit(new AnimalMultiplyTask(latch)); // животное размножается
         System.out.println("2");
+        executorService.submit(new AnimalHpDecreaseTask(latch)); // уменьшение здоровья
+        System.out.println("3");
         try {
             latch.await(); // Ожидаем, пока CountDownLatch не достигнет нуля
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
-
-        executorService.submit(new AnimalHpDecreaseTask()); // уменьшение здоровья
-        System.out.println("3");
         executorService.submit(new AnimalMoveTask()); // животные двигаются на другие локации
         System.out.println("4");
     }
