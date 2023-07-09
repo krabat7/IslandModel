@@ -7,10 +7,10 @@ import lifeform.plant.Plant;
 import java.util.*;
 
 public class Location {
-    private int row;
-    private int column;
-    private List<Animal> animals;
-    private List<Plant> plants;
+    private final int row;
+    private final int column;
+    private final List<Animal> animals;
+    private final List<Plant> plants;
 
     public Location(int row, int column) {
         this.row = row;
@@ -48,8 +48,8 @@ public class Location {
     }
     public List<LifeForm> getLifeForms() {
         List<LifeForm> lifeForms = new ArrayList<>();
-        lifeForms.add((LifeForm) getAnimals());
-        lifeForms.add((LifeForm) getPlants());
+        lifeForms.addAll(getAnimals());
+        lifeForms.addAll(getPlants());
         return lifeForms;
     }
     public int getRow() {
