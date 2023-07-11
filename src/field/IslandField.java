@@ -53,9 +53,9 @@ public class IslandField {
         location.addPlant(plant);
     }
 
-    public void removePlant(int row, int column) {
+    public void removePlant(Plant plant, int row, int column) {
         Location location = getLocation(row, column);
-        location.removePlant();
+        location.removePlant(plant);
     }
 
     public synchronized List<Animal> getAllAnimals() {
