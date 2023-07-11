@@ -4,7 +4,6 @@ import field.Location;
 import lifeform.animal.herbivore.*;
 import lifeform.animal.predator.*;
 import lifeform.plant.Plant;
-import simulation.helperObject.Pair;
 import simulation.thread.animalLifecycleTask.AnimalLifecycleTask;
 import simulation.thread.PlantGrowthTask;
 import simulation.thread.StatisticsTask;
@@ -53,66 +52,72 @@ public class IslandSimulation {
         StatisticsTask statisticsTask = new StatisticsTask();
 
         executorService.scheduleAtFixedRate(animalLifecycleTask, 5, 5, TimeUnit.SECONDS);
-        executorService.scheduleAtFixedRate(plantGrowthTask, 10, 45, TimeUnit.SECONDS);
-        executorService.scheduleAtFixedRate(statisticsTask, 5, 10, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(plantGrowthTask, 40, 80, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(statisticsTask, 7, 5, TimeUnit.SECONDS);
     }
 
     private List<Herbivore> createHerbivores(int countHerbivores) {
-        List<Pair<Herbivore, Integer>> herbivoreInfo = new ArrayList<>();
-        herbivoreInfo.add(new Pair<>(new Buffalo(), new Buffalo().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Caterpillar(), new Caterpillar().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Deer(), new Deer().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Duck(), new Duck().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Goat(), new Goat().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Horse(), new Horse().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Mouse(), new Mouse().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Rabbit(), new Rabbit().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new Sheep(), new Sheep().getMaxPopulation()));
-        herbivoreInfo.add(new Pair<>(new WildBoar(), new WildBoar().getMaxPopulation()));
-
-        int totalMaxPopulation = herbivoreInfo.stream()
-                .mapToInt(Pair::getRight)
-                .sum();
-
-        double proportion = (double) countHerbivores / totalMaxPopulation;
-
         List<Herbivore> herbivores = new ArrayList<>();
+        Random random = new Random();
 
-        for (Pair<Herbivore, Integer> info : herbivoreInfo) {
-            int speciesCount = (int) Math.round(proportion * info.getRight());
-            for (int i = 0; i < speciesCount; i++) {
-                herbivores.add(info.getLeft());
+        // Создаем по одному животному каждого вида
+        herbivores.add(new Buffalo());
+        herbivores.add(new Caterpillar());
+        herbivores.add(new Deer());
+        herbivores.add(new Duck());
+        herbivores.add(new Goat());
+        herbivores.add(new Horse());
+        herbivores.add(new Mouse());
+        herbivores.add(new Rabbit());
+        herbivores.add(new Sheep());
+        herbivores.add(new WildBoar());
+
+        // Генерируем случайное количество животных каждого вида, не менее 1
+        int remainingCount = countHerbivores - herbivores.size();
+        for (int i = 0; i < remainingCount; i++) {
+            // Генерируем случайный индекс для выбора вида животного
+            int randomIndex = random.nextInt(herbivores.size());
+            Herbivore randomHerbivore = herbivores.get(randomIndex);
+            try {
+                // Создаем экземпляр животного через рефлексию
+                Herbivore newHerbivore = randomHerbivore.getClass().newInstance();
+                herbivores.add(newHerbivore);
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
 
         return herbivores;
     }
-
     private List<Predator> createPredators(int countPredators) {
-        List<Pair<Predator, Integer>> predatorInfo = new ArrayList<>();
-        predatorInfo.add(new Pair<>(new Bear(), new Bear().getMaxPopulation()));
-        predatorInfo.add(new Pair<>(new Eagle(), new Eagle().getMaxPopulation()));
-        predatorInfo.add(new Pair<>(new Fox(), new Fox().getMaxPopulation()));
-        predatorInfo.add(new Pair<>(new Snake(), new Snake().getMaxPopulation()));
-        predatorInfo.add(new Pair<>(new Wolf(), new Wolf().getMaxPopulation()));
-
-        int totalMaxPopulation = predatorInfo.stream()
-                .mapToInt(Pair::getRight)
-                .sum();
-
-        double proportion = (double) countPredators / totalMaxPopulation;
-
         List<Predator> predators = new ArrayList<>();
+        Random random = new Random();
 
-        for (Pair<Predator, Integer> info : predatorInfo) {
-            int speciesCount = (int) Math.round(proportion * info.getRight());
-            for (int i = 0; i < speciesCount; i++) {
-                predators.add(info.getLeft());
+        // Создаем по одному животному каждого вида
+        predators.add(new Bear());
+        predators.add(new Eagle());
+        predators.add(new Fox());
+        predators.add(new Snake());
+        predators.add(new Wolf());
+
+        // Генерируем случайное количество животных каждого вида, не менее 1
+        int remainingCount = countPredators - predators.size();
+        for (int i = 0; i < remainingCount; i++) {
+            // Генерируем случайный индекс для выбора вида животного
+            int randomIndex = random.nextInt(predators.size());
+            Predator randomPredator = predators.get(randomIndex);
+            try {
+                // Создаем экземпляр животного через рефлексию
+                Predator newPredator = randomPredator.getClass().newInstance();
+                predators.add(newPredator);
+            } catch (InstantiationException | IllegalAccessException e) {
+                e.printStackTrace();
             }
         }
 
         return predators;
     }
+
 
     private List<Plant> createPlants(int countPlants) {
         List<Plant> plants = new ArrayList<>();
@@ -133,6 +138,7 @@ public class IslandSimulation {
                 Location location = IslandField.getInstance().getLocation(row, column);
                 if (location.getAnimals().stream().filter(c -> c.getName().equals(herbivore.getName())).toList().size() <= herbivore.getMaxPopulation()) {
                     islandField.addAnimal(herbivore, row, column);
+                    System.out.println(herbivore + " coord " + row + " : " + column);
                     placed = true;
                 }
             }
@@ -151,6 +157,7 @@ public class IslandSimulation {
                 Location location = IslandField.getInstance().getLocation(row, column);
                 if (location.getAnimals().stream().filter(c -> c.getName().equals(predator.getName())).toList().size() <= predator.getMaxPopulation()) {
                     islandField.addAnimal(predator, row, column);
+                    System.out.println(predator + " coord " + row + " : " + column);
                     placed = true;
                 }
             }
@@ -168,6 +175,7 @@ public class IslandSimulation {
                 Location location = IslandField.getInstance().getLocation(row, column);
                 if (location.getPlants().size() <= plant.getMaxPopulation()) {
                     islandField.addPlant(plant, row, column);
+                    System.out.println(plant + " coord " + row + " : " + column);
                     placed = true;
                 }
             }
