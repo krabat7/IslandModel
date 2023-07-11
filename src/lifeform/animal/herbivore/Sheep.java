@@ -11,9 +11,9 @@ public class Sheep extends Herbivore {
 
     @Override
     public void multiply(Animal partner) {
-        if (partner instanceof Caterpillar){
+        if (partner instanceof Sheep){
             Location location = IslandField.getInstance().getLocation(partner.getRow(), partner.getColumn());
-            location.addAnimal(new Caterpillar());
+            IslandField.getInstance().addAnimal(new Sheep(), location.getRow(), location.getColumn());
         }
     }
 }

@@ -13,7 +13,7 @@ public class Caterpillar extends Herbivore {
     public void multiply(Animal partner) {
         if (partner instanceof Caterpillar){
             Location location = IslandField.getInstance().getLocation(partner.getRow(), partner.getColumn());
-            location.addAnimal(new Caterpillar());
+            IslandField.getInstance().addAnimal(new Caterpillar(), location.getRow(), location.getColumn());
         }
     }
 }

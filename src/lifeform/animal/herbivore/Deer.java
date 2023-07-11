@@ -13,7 +13,7 @@ public class Deer extends Herbivore {
     public void multiply(Animal partner) {
         if (partner instanceof Deer){
             Location location = IslandField.getInstance().getLocation(partner.getRow(), partner.getColumn());
-            location.addAnimal(new Deer());
+            IslandField.getInstance().addAnimal(new Deer(), location.getRow(), location.getColumn());
         }
     }
 }

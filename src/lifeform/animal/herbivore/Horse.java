@@ -13,7 +13,7 @@ public class Horse extends Herbivore {
     public void multiply(Animal partner) {
         if (partner instanceof Horse){
             Location location = IslandField.getInstance().getLocation(partner.getRow(), partner.getColumn());
-            location.addAnimal(new Horse());
+            IslandField.getInstance().addAnimal(new Horse(), location.getRow(), location.getColumn());
         }
     }
 }
