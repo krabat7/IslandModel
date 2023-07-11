@@ -4,79 +4,80 @@ import field.IslandField;
 import field.Location;
 import lifeform.LifeForm;
 import lifeform.animal.Animal;
+import lifeform.plant.Plant;
 import simulation.IslandSimulation;
 
+import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Random;
 import java.util.concurrent.CountDownLatch;
-import java.util.concurrent.ThreadLocalRandom;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class AnimalEatTask implements Runnable {
-    final private AtomicInteger countAnimals;
-    final private AtomicInteger animalsAreEaten;
-    private CountDownLatch latch;
+    private final CountDownLatch latch;
 
-    public AnimalEatTask(CountDownLatch latch){
-        countAnimals = new AtomicInteger();
-        animalsAreEaten = new AtomicInteger();
+    public AnimalEatTask(CountDownLatch latch) {
         this.latch = latch;
     }
-    public AnimalEatTask(){
-        countAnimals = new AtomicInteger();
-        animalsAreEaten = new AtomicInteger();
-    }
+
     @Override
     public void run() {
+        System.out.println("EAT_START");
+
         List<Animal> animals = IslandField.getInstance().getAllAnimals();
+        List<LifeForm> lifeFormsEaten = new ArrayList<>();
         int countAnimalsStart = animals.size();
-        if (countAnimalsStart > 0) {   //проверка на умерли ли все животные
-            for (int i = 0; i < animals.size(); i++) {
-                Animal currentAnimal = animals.get(i);
+
+        if (countAnimalsStart > 0) {
+            Iterator<Animal> iterator = animals.iterator();
+
+            while (iterator.hasNext()) {
+                Animal currentAnimal = iterator.next();
+
+                System.out.println("Животное: " + currentAnimal + " координаты -> " + currentAnimal.getRow() + ":" + currentAnimal.getColumn());
                 if (currentAnimal.getMaxHp() > 0) {
-                    System.out.println("START_EAT31");
-                    System.out.println(currentAnimal);
-                    System.out.println(currentAnimal.getRow());
-                    System.out.println(currentAnimal.getColumn());
                     Location location = IslandField.getInstance().getLocation(currentAnimal.getRow(), currentAnimal.getColumn());
-                    System.out.println("EAT32");
-                    Random random = ThreadLocalRandom.current();
-                    System.out.println("EAT33");
                     List<LifeForm> locationLifeForms = location.getLifeForms();
-                    System.out.println("EAT34");
-                    if (locationLifeForms.size() > 0) {
-                        LifeForm lifeFormToEat = locationLifeForms.get(random.nextInt(locationLifeForms.size()));
-                        System.out.println("EAT35");
-                        System.out.println(currentAnimal + " __ " + lifeFormToEat);
-                        System.out.println();
-                        boolean isEaten = currentAnimal.eat(lifeFormToEat);
-                        System.out.println("EAT355");
-                        if (isEaten) {
-                            animals.remove(lifeFormToEat);
-                            animalsAreEaten.incrementAndGet(); // Кол-во съеденных животных
+                    System.out.println("SIZE: " + locationLifeForms.size());
+
+                    if (!locationLifeForms.isEmpty()) {
+                        for (LifeForm lifeForm : locationLifeForms) {
+                            System.out.println("Возможно еда: " + lifeForm + " координаты -> " + lifeForm.getRow() + ":" + lifeForm.getColumn());
+                            if (currentAnimal.getChanceToEat(lifeForm.getName()) > 0 && !(lifeFormsEaten.contains(lifeForm))) {
+                                System.out.println("Еда: " + lifeForm);
+                                boolean isEaten = currentAnimal.eat(lifeForm);
+
+                                if (isEaten) {
+                                    if (lifeForm instanceof Animal) {
+                                        Animal animalEaten = (Animal) lifeForm;
+                                        if (location.getAnimals().contains(animalEaten)) {
+                                            IslandField.getInstance().removeAnimal(animalEaten, location.getRow(), location.getColumn());
+                                            System.out.println("wtf");
+                                        }
+                                        lifeFormsEaten.add(animalEaten);
+                                        System.out.println("wtf3");
+                                    } else{
+                                        Plant plant = (Plant) lifeForm;
+                                        if (location.getPlants().size() > 0) {
+                                            IslandField.getInstance().removePlant(plant, location.getRow(), location.getColumn());
+                                        }
+                                    }
+                                    System.out.println("Съеден");
+                                }
+                                System.out.println("Попытка засчитана");
+                                break;
+                            }
                         }
-                        System.out.println("EAT36");
-                        animals.remove(currentAnimal);
-                        System.out.println("EAT37");
                     }
                 }
+                iterator.remove();
+                System.out.println("Перебрал всю еду");
             }
         } else {
-            System.out.println("EATGGGGGG");
+            System.out.println("ВСЕ ЖИВОТНЫЕ УМЕРЛИ!");
             IslandSimulation.getInstance().getExecutorService().shutdown();
             System.exit(0);
         }
-        System.out.println("EAT4");
-        countAnimals.set(countAnimalsStart - animalsAreEaten.get()); // Кол-во животных на острове
         latch.countDown();
         System.out.println("END_EAT");
-    }
-
-    public AtomicInteger getAnimalsAreEaten() {
-        return animalsAreEaten;
-    }
-
-    public AtomicInteger getCountAnimals() {
-        return countAnimals;
     }
 }

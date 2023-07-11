@@ -9,25 +9,20 @@ import simulation.thread.animalLifecycleTask.task.AnimalMultiplyTask;
 public class StatisticsTask implements Runnable{
     private boolean isTimeOver;
     private int babies;
-    private int animalsDiedOfHunger;
+    private int animalsDied;
     private int countAnimalsEnd;
-    private int animalsAreEaten;
+    private int animalsWere;
     private int countPlants;
     @Override
     public void run() {
         long timeNow = IslandSimulation.getInstance().getTimeNow();
         isTimeOver = checkTime(timeNow);
 
-        AnimalMultiplyTask animalMultiplyTask = new AnimalMultiplyTask();
-        AnimalEatTask animalEatTask = new AnimalEatTask();
-        AnimalHpDecreaseTask animalHpDecreaseTask = new AnimalHpDecreaseTask();
-
-        babies = animalMultiplyTask.getBabies().get();
-        animalsDiedOfHunger = animalHpDecreaseTask.getAnimalsDiedOfHunger().get();
-        countAnimalsEnd = babies + animalEatTask.getCountAnimals().get() - animalsDiedOfHunger;
-        animalsAreEaten = animalEatTask.getAnimalsAreEaten().get();
+        babies = new AnimalMultiplyTask().getBabies();
+        countAnimalsEnd = IslandField.getInstance().getAllAnimals().size();
+        animalsDied += Math.max(-(countAnimalsEnd - animalsWere), 0);
         countPlants = IslandField.getInstance().getAllPlants().size();
-
+        animalsWere = countAnimalsEnd;
         printStats();
 
         if (isTimeOver) {
@@ -55,11 +50,8 @@ public class StatisticsTask implements Runnable{
         System.out.print("Животных на острове: ");
         System.out.println(countAnimalsEnd);
 
-        System.out.print("Животных съедено: ");
-        System.out.println(animalsAreEaten);
-
-        System.out.print("Животных умерло от голода: ");
-        System.out.println(animalsDiedOfHunger);
+        System.out.print("Животных умерло: ");
+        System.out.println(animalsDied);
 
         System.out.print("Детенышей появилось на свет: ");
         System.out.println(babies);
