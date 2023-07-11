@@ -34,10 +34,10 @@ public class Location {
     public void addPlant(Plant plant) {
         plant.setRow(row);
         plant.setColumn(column);
-        plants.add(new Plant());
+        plants.add(plant);
     }
-    public void removePlant() {
-        plants.remove(0);
+    public void removePlant(Plant plant) {
+        plants.remove(plant);
     }
 
     public List<Plant> getPlants() {
@@ -48,8 +48,8 @@ public class Location {
     }
     public List<LifeForm> getLifeForms() {
         List<LifeForm> lifeForms = new ArrayList<>();
-        lifeForms.addAll(getAnimals());
-        lifeForms.addAll(getPlants());
+        lifeForms.addAll(animals);
+        lifeForms.addAll(plants);
         return lifeForms;
     }
     public int getRow() {
