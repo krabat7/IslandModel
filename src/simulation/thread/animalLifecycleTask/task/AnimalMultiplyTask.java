@@ -3,8 +3,6 @@ package simulation.thread.animalLifecycleTask.task;
 import field.IslandField;
 import field.Location;
 import lifeform.animal.Animal;
-import simulation.IslandSimulation;
-import simulation.thread.StatisticsTask;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,10 +49,6 @@ public class AnimalMultiplyTask implements Runnable {
                     }
                 }
             }
-        } else {
-            System.out.printf("ВЫ ПРОИГРАЛИ! ВСЕ ЖИВОТНЫЕ УМЕРЛИ НА %d ДЕНЬ!", StatisticsTask.getCurrentDay());
-            IslandSimulation.getInstance().getExecutorService().shutdown();
-            System.exit(0);
         }
         latch.countDown();
         System.out.println("MULT_END");
