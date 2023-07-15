@@ -26,6 +26,7 @@ public class Menu {
         System.out.println("2. Нет");
         System.out.print("Введите номер режима: ");
         int answer = parameters.takeInt(1, 2);
+
         if (answer == 1) {
             parameters.changeParameters();
         } else {

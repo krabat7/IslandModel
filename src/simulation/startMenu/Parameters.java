@@ -82,6 +82,7 @@ public class Parameters {
         System.out.print("Введите номер режима: ");
         int countHerbivores = 0;
         int answer = takeInt(1, 2);
+
         if (answer == 1) {
             System.out.println("Введите желаемое количество травоядных от 10 до 500!");
             System.out.println("Количество травоядных:");
@@ -101,6 +102,7 @@ public class Parameters {
         System.out.print("Введите номер режима: ");
         int countPlants = 0;
         int answer = takeInt(1, 2);
+        
         if (answer == 1) {
             System.out.println("Введите желаемое количество растений от 1 до 500!");
             System.out.println("Количество растений:");
