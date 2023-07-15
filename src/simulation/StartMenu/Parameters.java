@@ -117,15 +117,18 @@ public class Parameters {
      */
     public int takeInt(int lowNum, int highNum) {
         Scanner scanner = new Scanner(System.in);
-        int number = scanner.nextInt();
         while (true) {
-            if (number >= lowNum && number <= highNum) {
-                break;
+            if (scanner.hasNextInt()) {
+                int number = scanner.nextInt();
+                if (number >= lowNum && number <= highNum) {
+                    return number;
+                } else {
+                    System.out.println("Ошибка! Введенное число не находится в заданном диапазоне. Попробуйте еще раз:");
+                }
             } else {
-                System.out.println("Ошибка! Некорректный ввод. Попробуйте еще раз:");
-                number = scanner.nextInt();
+                scanner.next();
+                System.out.println("Ошибка! Введено некорректное значение. Попробуйте еще раз:");
             }
         }
-        return number;
     }
 }
