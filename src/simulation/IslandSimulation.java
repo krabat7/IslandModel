@@ -22,9 +22,9 @@ import java.util.concurrent.TimeUnit;
  */
 public class IslandSimulation {
     private final long startTime;
-    private final int countHerbivores = 30;
-    private final int countPlants = 25;
-    private final int countPredators = 10;
+    private final int countHerbivores = 35;
+    private final int countPlants = 40;
+    private final int countPredators = 20;
     private static volatile IslandSimulation instance;
     private volatile ScheduledExecutorService executorService;
 
@@ -84,9 +84,9 @@ public class IslandSimulation {
         PlantGrowthTask plantGrowthTask = new PlantGrowthTask();
         StatisticsTask statisticsTask = new StatisticsTask(animalLifecycleTask.getAnimalEatTask(), animalLifecycleTask.getAnimalHpDecreaseTask(), animalLifecycleTask.getObjectMultiplyTask());
 
-        executorService.scheduleAtFixedRate(animalLifecycleTask, 1, 5, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(animalLifecycleTask, 1, 8, TimeUnit.SECONDS);
         executorService.scheduleAtFixedRate(plantGrowthTask, 40, 30, TimeUnit.SECONDS);
-        executorService.scheduleAtFixedRate(statisticsTask, 0, 5, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(statisticsTask, 0, 8, TimeUnit.SECONDS);
     }
 
     /**
