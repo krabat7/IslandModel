@@ -67,7 +67,7 @@ public class StatisticsTask implements Runnable {
             currentDay++;
             System.out.println();
         }
-
+        System.out.println();
         System.out.println("СТАТИСТИКА ПО ОСТРОВУ");
         System.out.println();
 
