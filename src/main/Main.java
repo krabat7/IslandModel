@@ -1,6 +1,6 @@
 package main;
 
-import simulation.StartMenu.Menu;
+import simulation.startMenu.Menu;
 
 public class Main {
     public static void main(String[] args) {

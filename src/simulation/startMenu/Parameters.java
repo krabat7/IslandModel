@@ -1,4 +1,4 @@
-package simulation.StartMenu;
+package simulation.startMenu;
 
 import field.IslandField;
 import simulation.IslandSimulation;
