@@ -27,7 +27,6 @@ public class AnimalHpDecreaseTask implements Runnable {
     @Override
     public void run() {
         animalsDiedByHungry = 0;
-        System.out.println("HP_START");
         List<Animal> animals = IslandField.getInstance().getAllAnimals().stream().filter(c -> c.getMaxHp() > 0).toList();
         if (IslandSimulation.getInstance().getTimeNow() / 60 >= 3) {
             percentOfHpToDecrease = percentOfHpToDecrease * 2;
@@ -43,7 +42,6 @@ public class AnimalHpDecreaseTask implements Runnable {
             }
         }
         latch.countDown();
-        System.out.println("HP_END");
     }
     public int getAnimalsDiedByHungry() {
         return animalsDiedByHungry;

@@ -22,7 +22,6 @@ public class AnimalMultiplyTask implements Runnable {
     @Override
     public void run() {
         babies = 0;
-        System.out.println("MULT_START");
         List<Animal> animals = IslandField.getInstance().getAllAnimals();
         List<Animal> animalsMultiplied = new ArrayList<>();
         if (animals.size() > 0) {
@@ -51,7 +50,6 @@ public class AnimalMultiplyTask implements Runnable {
             }
         }
         latch.countDown();
-        System.out.println("MULT_END");
     }
 
     public int getBabies() {

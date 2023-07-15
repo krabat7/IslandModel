@@ -30,18 +30,14 @@ public class AnimalLifecycleTask implements Runnable {
         ExecutorService executorService = Executors.newFixedThreadPool(4);
 
         executorService.submit(animalEatTask); // животное ест
-        System.out.println("1");
         executorService.submit(animalMultiplyTask); // животное размножается
-        System.out.println("2");
         executorService.submit(animalHpDecreaseTask); // уменьшение здоровья
-        System.out.println("3");
         try {
             latch.await(); // ожидаем, пока CountDownLatch не достигнет нуля
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
         executorService.submit(new AnimalMoveTask()); // животные двигаются на другие локации
-        System.out.println("4");
     }
 
     public AnimalMultiplyTask getObjectMultiplyTask() {

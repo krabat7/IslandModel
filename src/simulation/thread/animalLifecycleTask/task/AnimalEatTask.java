@@ -30,7 +30,6 @@ public class AnimalEatTask implements Runnable {
 
     @Override
     public void run() {
-        System.out.println("EAT_START");
         animalsEaten = 0;
         List<Animal> animals = IslandField.getInstance().getAllAnimals();
         List<LifeForm> lifeFormsEaten = new ArrayList<>();
@@ -81,7 +80,6 @@ public class AnimalEatTask implements Runnable {
             System.exit(0);
         }
         latch.countDown();
-        System.out.println("END_EAT");
     }
     public int getAnimalsEaten() {
         return animalsEaten;
