@@ -1,18 +1,24 @@
 package lifeform.animal.herbivore;
 
-import error.ObjectNotLifeFormException;
 import field.IslandField;
 import field.Location;
-import lifeform.LifeForm;
 import lifeform.animal.Animal;
 
-import java.util.concurrent.ThreadLocalRandom;
-
 public class Mouse extends Herbivore {
+    /**
+     * Конструктор класса Mouse.
+     * Устанавливает значения характеристик для мыши.
+     */
     public Mouse() {
         super(0.05, 1, 0.01, 500, "Mouse");
     }
 
+    /**
+     * Возвращает шанс съесть определенную пищу.
+     *
+     * @param foodName Название пищи
+     * @return Шанс съесть пищу
+     */
     @Override
     public double getChanceToEat(String foodName) {
         return switch (foodName) {
@@ -22,6 +28,12 @@ public class Mouse extends Herbivore {
         };
     }
 
+    /**
+     * Размножается с партнером.
+     * Если партнером является мышь, создается новая мышь на той же локации.
+     *
+     * @param partner Партнер для размножения
+     */
     @Override
     public void multiply(Animal partner) {
         if (partner instanceof Mouse){

@@ -1,19 +1,24 @@
 package lifeform.animal.predator;
 
-import error.ObjectNotLifeFormException;
 import field.IslandField;
 import field.Location;
-import lifeform.LifeForm;
 import lifeform.animal.Animal;
-import lifeform.animal.herbivore.Duck;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Fox extends Predator {
+    /**
+     * Конструктор класса Fox.
+     * Устанавливает значения характеристик для лисы.
+     */
     public Fox() {
         super(8, 2, 2, 30, "Fox");
     }
 
+    /**
+     * Получает шанс съесть определенный вид пищи.
+     *
+     * @param foodName Название пищи
+     * @return Шанс съесть пищу
+     */
     @Override
     public double getChanceToEat(String foodName) {
         return switch (foodName) {
@@ -25,6 +30,12 @@ public class Fox extends Predator {
         };
     }
 
+    /**
+     * Размножается с партнером.
+     * Если партнером является лиса, создается новая лиса на той же локации.
+     *
+     * @param partner Партнер для размножения
+     */
     @Override
     public void multiply(Animal partner) {
         if (partner instanceof Fox){

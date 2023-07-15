@@ -1,31 +1,42 @@
 package simulation;
+
 import field.IslandField;
 import field.Location;
 import lifeform.animal.herbivore.*;
 import lifeform.animal.predator.*;
 import lifeform.plant.Plant;
-import simulation.thread.animalLifecycleTask.AnimalLifecycleTask;
 import simulation.thread.PlantGrowthTask;
 import simulation.thread.StatisticsTask;
+import simulation.thread.animalLifecycleTask.AnimalLifecycleTask;
+
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
-import java.util.concurrent.*;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
+import java.util.concurrent.ThreadLocalRandom;
+import java.util.concurrent.TimeUnit;
 
+/**
+ * Класс, моделирующий островную экосистему
+ */
 public class IslandSimulation {
-    private IslandField islandField;
     private final long startTime;
-    private int countHerbivores = 30; // Изменять перед созданием объекта IslandSimulation
-    private int countPlants = 25; // Изменять перед созданием объекта IslandSimulation
-    private int countPredators = 10; // Изменять перед созданием объекта IslandSimulation
+    private final int countHerbivores = 30;
+    private final int countPlants = 25;
+    private final int countPredators = 10;
     private static volatile IslandSimulation instance;
     private volatile ScheduledExecutorService executorService;
 
     private IslandSimulation() {
         startTime = System.currentTimeMillis();
-        createIslandModel();
-        runIslandModel();
     }
+
+    /**
+     * Получить экземпляр класса IslandSimulation (Singleton)
+     *
+     * @return instance Экземпляр класса IslandSimulation
+     */
     public static IslandSimulation getInstance() {
         if (instance == null) {
             synchronized (IslandSimulation.class) {
@@ -36,26 +47,54 @@ public class IslandSimulation {
         }
         return instance;
     }
-    private void createIslandModel(){
-        islandField = IslandField.getInstance();
 
+    /**
+     * Создать модель острова с заданным количеством травоядных, хищников и растений
+     *
+     * @param countHerbivores Количество травоядных
+     * @param countPredators  Количество хищников
+     * @param countPlants     Количество растений
+     */
+    public void createIslandModel(int countHerbivores, int countPredators, int countPlants) {
         placeHerbivores(countHerbivores);
         placePredators(countPredators);
         placePlants(countPlants);
+
+        runIslandModel();
     }
 
-    private void runIslandModel(){
+    /**
+     * Создать модель острова с количеством травоядных, хищников и растений, заданным по умолчанию
+     */
+    public void createIslandModel() {
+        placeHerbivores(countHerbivores);
+        placePredators(countPredators);
+        placePlants(countPlants);
+
+        runIslandModel();
+    }
+
+    /**
+     * Запустить модель острова
+     */
+    private void runIslandModel() {
         executorService = Executors.newScheduledThreadPool(3);
 
         AnimalLifecycleTask animalLifecycleTask = new AnimalLifecycleTask();
         PlantGrowthTask plantGrowthTask = new PlantGrowthTask();
-        StatisticsTask statisticsTask = new StatisticsTask();
+        StatisticsTask statisticsTask = new StatisticsTask(animalLifecycleTask.getAnimalEatTask(), animalLifecycleTask.getAnimalHpDecreaseTask(), animalLifecycleTask.getObjectMultiplyTask());
 
-        executorService.scheduleAtFixedRate(animalLifecycleTask, 5, 5, TimeUnit.SECONDS);
-        executorService.scheduleAtFixedRate(plantGrowthTask, 40, 80, TimeUnit.SECONDS);
-        executorService.scheduleAtFixedRate(statisticsTask, 7, 5, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(animalLifecycleTask, 1, 5, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(plantGrowthTask, 40, 30, TimeUnit.SECONDS);
+        executorService.scheduleAtFixedRate(statisticsTask, 0, 5, TimeUnit.SECONDS);
     }
 
+    /**
+     * Создать список травоядных с заданным количеством
+     *
+     * @param countHerbivores Количество травоядных
+     * @return herbivores Список травоядных
+     */
     private List<Herbivore> createHerbivores(int countHerbivores) {
         List<Herbivore> herbivores = new ArrayList<>();
         Random random = new Random();
@@ -89,6 +128,13 @@ public class IslandSimulation {
 
         return herbivores;
     }
+
+    /**
+     * Создать список хищников с заданным количеством
+     *
+     * @param countPredators Количество хищников
+     * @return predators Список хищников
+     */
     private List<Predator> createPredators(int countPredators) {
         List<Predator> predators = new ArrayList<>();
         Random random = new Random();
@@ -118,7 +164,12 @@ public class IslandSimulation {
         return predators;
     }
 
-
+    /**
+     * Создать список растений с заданным количеством
+     *
+     * @param countPlants Количество растений
+     * @return plants Список растений
+     */
     private List<Plant> createPlants(int countPlants) {
         List<Plant> plants = new ArrayList<>();
         for (int i = 0; i < countPlants; i++) {
@@ -127,24 +178,33 @@ public class IslandSimulation {
         return plants;
     }
 
+    /**
+     * Разместить травоядных на острове
+     *
+     * @param countHerbivores Количество травоядных
+     */
     public void placeHerbivores(int countHerbivores) {
         List<Herbivore> herbivores = createHerbivores(countHerbivores);
         Random random = ThreadLocalRandom.current();
         for (Herbivore herbivore : herbivores) {
             boolean placed = false;
             while (!placed) {
-                int row = random.nextInt(islandField.getNumRows());
-                int column = random.nextInt(islandField.getNumColumns());
+                int row = random.nextInt(IslandField.getInstance().getNumRows());
+                int column = random.nextInt(IslandField.getInstance().getNumColumns());
                 Location location = IslandField.getInstance().getLocation(row, column);
                 if (location.getAnimals().stream().filter(c -> c.getName().equals(herbivore.getName())).toList().size() <= herbivore.getMaxPopulation()) {
-                    islandField.addAnimal(herbivore, row, column);
-                    System.out.println(herbivore + " coord " + row + " : " + column);
+                    IslandField.getInstance().addAnimal(herbivore, row, column);
                     placed = true;
                 }
             }
         }
     }
 
+    /**
+     * Разместить хищников на острове
+     *
+     * @param countPredators Количество хищников
+     */
     public void placePredators(int countPredators) {
         List<Predator> predators = createPredators(countPredators);
 
@@ -152,17 +212,22 @@ public class IslandSimulation {
         for (Predator predator : predators) {
             boolean placed = false;
             while (!placed) {
-                int row = random.nextInt(islandField.getNumRows());
-                int column = random.nextInt(islandField.getNumColumns());
+                int row = random.nextInt(IslandField.getInstance().getNumRows());
+                int column = random.nextInt(IslandField.getInstance().getNumColumns());
                 Location location = IslandField.getInstance().getLocation(row, column);
                 if (location.getAnimals().stream().filter(c -> c.getName().equals(predator.getName())).toList().size() <= predator.getMaxPopulation()) {
-                    islandField.addAnimal(predator, row, column);
-                    System.out.println(predator + " coord " + row + " : " + column);
+                    IslandField.getInstance().addAnimal(predator, row, column);
                     placed = true;
                 }
             }
         }
     }
+
+    /**
+     * Разместить растения на острове
+     *
+     * @param countPlants Количество растений
+     */
     public void placePlants(int countPlants) {
         List<Plant> plants = createPlants(countPlants);
 
@@ -170,17 +235,22 @@ public class IslandSimulation {
         for (Plant plant : plants) {
             boolean placed = false;
             while (!placed) {
-                int row = random.nextInt(islandField.getNumRows());
-                int column = random.nextInt(islandField.getNumColumns());
+                int row = random.nextInt(IslandField.getInstance().getNumRows());
+                int column = random.nextInt(IslandField.getInstance().getNumColumns());
                 Location location = IslandField.getInstance().getLocation(row, column);
                 if (location.getPlants().size() <= plant.getMaxPopulation()) {
-                    islandField.addPlant(plant, row, column);
-                    System.out.println(plant + " coord " + row + " : " + column);
+                    IslandField.getInstance().addPlant(plant, row, column);
                     placed = true;
                 }
             }
         }
     }
+
+    /**
+     * Получить текущее время симуляции
+     *
+     * @return timeNow Текущее время симуляции
+     */
     public long getTimeNow() {
         return (System.currentTimeMillis() - startTime) / 1000;
     }
@@ -189,16 +259,15 @@ public class IslandSimulation {
         return executorService;
     }
 
-    public void setCountHerbivores(int countHerbivores) {
-        this.countHerbivores = countHerbivores;
+    public int getCountHerbivores() {
+        return countHerbivores;
     }
 
-    public void setCountPlants(int countPlants) {
-        this.countPlants = countPlants;
+    public int getCountPlants() {
+        return countPlants;
     }
 
-    public void setCountPredators(int countPredators) {
-        this.countPredators = countPredators;
+    public int getCountPredators() {
+        return countPredators;
     }
 }
-

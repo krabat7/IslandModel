@@ -10,8 +10,8 @@ import java.util.Random;
 import java.util.concurrent.ThreadLocalRandom;
 
 public abstract class Animal extends LifeForm {
-    final private int step; // Скорость перемещения, не более чем, клеток за ход
-    final private double maxHp; // Максимальное количество килограммов пищи нужно животному для полного насыщения
+    private final int step; // Скорость перемещения, не более чем, клеток за ход
+    private final double maxHp; // Максимальное количество килограммов пищи нужно животному для полного насыщения
     private double hp; // Количество здоровья животного
 
     public Animal(double weight, int step, double maxHp, int maxPopulation, String name) {
@@ -21,6 +21,12 @@ public abstract class Animal extends LifeForm {
         this.hp = maxHp; // На старте максимальное количество здоровья
     }
 
+    /**
+     * Проверяет, может ли животное съесть указанную пищу.
+     *
+     * @param food Пища, которую пытается съесть животное
+     * @return true, если животное успешно съело пищу, иначе - false
+     */
     public boolean eat(Object food) {
         double chanceToEat;
         LifeForm lifeForm = null;
@@ -28,10 +34,10 @@ public abstract class Animal extends LifeForm {
 
         if (food instanceof LifeForm) {
             lifeForm = (LifeForm) food;
-        } else{
+        } else {
             try {
-                throw new ObjectNotLifeFormException("Объект не является животными/растением.");
-            } catch (Exception e){
+                throw new ObjectNotLifeFormException("Объект не является животным/растением.");
+            } catch (Exception e) {
                 System.out.println(e.getMessage());
             }
         }
@@ -40,26 +46,20 @@ public abstract class Animal extends LifeForm {
         chanceToEat = getChanceToEat(foodName);
 
         animalEatFood = ThreadLocalRandom.current().nextDouble() < chanceToEat;
-        System.out.println("Шанс: " + chanceToEat + " съедает ли " + animalEatFood);
-        if (animalEatFood){
+        if (animalEatFood) {
             setHp(Math.min((getHp() + lifeForm.getWeight()), getMaxHp())); // Показатель здоровья повышается после съедения
             Location location = IslandField.getInstance().getLocation(lifeForm.getRow(), lifeForm.getColumn()); // Животное/растение удаляется из списка обиталей локации после съедения
-            if (lifeForm instanceof Animal){
-                Animal animal = (Animal) lifeForm;
+            if (lifeForm instanceof Animal animal) {
                 if (location.getAnimals().contains(animal)) {
                     IslandField.getInstance().removeAnimal(animal, location.getRow(), location.getColumn());
-                    System.out.println("Животное удалено с карты");
-                } else{
-                    System.out.println("Животного почему то нет на карте");
+                } else {
                     return false;
                 }
-            }else{
+            } else {
                 Plant plant = (Plant) lifeForm;
                 if (location.getPlants().size() > 0) {
                     IslandField.getInstance().removePlant(plant, location.getRow(), location.getColumn());
-                    System.out.println("Растение удалено с карты");
-                } else{
-                    System.out.println("Растения почему то нет на карте");
+                } else {
                     return false;
                 }
             }
@@ -67,9 +67,24 @@ public abstract class Animal extends LifeForm {
         return animalEatFood;
     }
 
+    /**
+     * Абстрактный метод для получения шанса съесть указанную пищу.
+     *
+     * @param foodName Имя пищи
+     * @return Шанс съесть пищу
+     */
     public abstract double getChanceToEat(String foodName);
+
+    /**
+     * Абстрактный метод для размножения животного с партнером.
+     *
+     * @param partner Партнер для размножения
+     */
     public abstract void multiply(Animal partner);
 
+    /**
+     * Перемещает животное на случайное количество клеток в случайном направлении.
+     */
     public void move() {
         Random random = new Random();
         int randomCells = random.nextInt(getStep()) + 1;

@@ -2,10 +2,19 @@ package simulation.thread;
 
 import simulation.IslandSimulation;
 
-public class PlantGrowthTask implements Runnable{
+/**
+ * Задача для роста растений на острове
+ */
+public class PlantGrowthTask implements Runnable {
     @Override
     public void run() {
-        IslandSimulation.getInstance().placePlants(10);
-        System.out.println("PLANT");
+        System.out.println("PLANT_START");
+        int countPlants = 20;
+        if (IslandSimulation.getInstance().getTimeNow() >= 2) {
+            IslandSimulation.getInstance().placePlants(countPlants / 2);
+        } else {
+            IslandSimulation.getInstance().placePlants(countPlants);
+        }
+        System.out.println("PLANT_END");
     }
 }

@@ -1,19 +1,24 @@
 package lifeform.animal.predator;
 
-import error.ObjectNotLifeFormException;
 import field.IslandField;
 import field.Location;
-import lifeform.LifeForm;
 import lifeform.animal.Animal;
-import lifeform.animal.herbivore.Duck;
-
-import java.util.concurrent.ThreadLocalRandom;
 
 public class Eagle extends Predator {
+    /**
+     * Конструктор класса Eagle.
+     * Устанавливает значения характеристик для орла.
+     */
     public Eagle() {
         super(6, 3, 1, 20, "Eagle");
     }
 
+    /**
+     * Получает шанс съесть определенный вид пищи.
+     *
+     * @param foodName Название пищи
+     * @return Шанс съесть пищу
+     */
     @Override
     public double getChanceToEat(String foodName) {
         return switch (foodName) {
@@ -24,6 +29,12 @@ public class Eagle extends Predator {
         };
     }
 
+    /**
+     * Размножается с партнером.
+     * Если партнером является орел, создается новый орел на той же локации.
+     *
+     * @param partner Партнер для размножения
+     */
     @Override
     public void multiply(Animal partner) {
         if (partner instanceof Eagle){
